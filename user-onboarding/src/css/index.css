@@ -4,14 +4,13 @@
     color: Black;
     background-image: url(../images/bg.jpg);
     background-attachment: fixed;
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
 }
 
 .signUp {
     background-color: white;
-    opacity: 100;
-    padding: 20px;
+    padding: 20px 20px 0;
     border-radius: 20px;
 }
 
@@ -24,15 +23,17 @@ Form {
     display: flex;
     flex-direction: column;
     width: 30%;
-    padding: 50px 100px;
+    padding: 50px 100px 20px;
 }
 
 .field {
-    background-color: white;
-    color: black;
     padding: 5px;
-    margin: 10px;
+    margin: 5px;
     border-radius: 10px;
+}
+
+.name {
+    width: 43.3%;
 }
 
 .tos {
@@ -52,6 +53,12 @@ button {
     padding: 5px;
     margin: 10px;
     border-radius: 10px;
+}
+
+.registeredUsers {
+    background-color: white;
+    padding: 0px 150px;
+    border-radius: 2px;
 }
 
 .footer {

@@ -1,34 +1,59 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { withFormik, Form, Field } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
 import '../css/index.css';
 
-function LoginForm( {value, errors, touched} ) {
-  return (
-    <>
-    <div className="signUp">
-        <Form>
-        <h2>Join The Team</h2>
-        {touched.name && errors.name && <p>{errors.name}</p>}
-        <Field className="field" type="name" name="name" placeholder="Full Name" />
-        {touched.email && errors.email && <p>{errors.email}</p>}
-        <Field className="field" type="email" name="email" placeholder="Email" />
-        {touched.password && errors.password && <p>{errors.password}</p>}
-        <Field className="field" type="password" name="password" placeholder="Password" />
-        {touched.confirmPassword && errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <Field className="field" type="password" name="confirmPassword" placeholder="Confirm Password" />
-        <span className="tos"><Field type="checkbox" name="tos"  />  I have read and agreed to the <span className="link">Terms of Service</span>.</span>
-        <button>Sign Up</button>
-        </Form>
-    </div>
-    </>
+function LoginForm( {values, errors, touched, status} ) {
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        status && setUsers([...users, status])}, [status]);
+
+    return (
+      <>
+        <div className="signUp">
+            <Form>
+            <h2>Join The Team</h2>
+            <span>
+                {touched.firstName && errors.firstName && <p>{errors.firstName}</p>}
+                <Field className="field name" type="text" name="firstName" placeholder="First Name" />
+                {touched.lastName && errors.lastName && <p>{errors.lastName}</p>}
+                <Field className="field name" type="text" name="lastName" placeholder="Last Name" />
+            </span>
+            {touched.role && errors.role && <p>{errors.role}</p>}
+            <Field className="field" component="select" name="role">
+                <option value="Intern">Intern</option>
+                <option value="Developer">Developer</option>
+                <option value="Team Lead">Team Lead</option>
+                <option value="Manager">Manager</option>
+            </Field>
+            {touched.email && errors.email && <p>{errors.email}</p>}
+            <Field className="field" type="text" name="email" placeholder="Email" />
+            {touched.password && errors.password && <p>{errors.password}</p>}
+            <Field className="field" type="password" name="password" placeholder="Password" />
+            {touched.confirmPassword && errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+            <Field className="field" type="password" name="confirmPassword" placeholder="Confirm Password" />
+            <span className="tos"><Field type="checkbox" name="tos" checked={values.tos}  />  I have read and agreed to the <span className="link">Terms of Service</span>.</span>
+            <button type="submit">Sign Up</button>
+            </Form>
+        </div>
+        <div className="registeredUsers">
+            <h5>Registered Users:</h5>
+            {users.map(user => (
+                <p key={user.email}>{`${user.firstName} ${user.lastName}, ${user.role}`}</p>
+          ))}
+        </div>
+      </>
   );
 }
 
 const FormikLoginForm = withFormik({
-  mapPropsToValues({ name, email, password, confirmPassword, tos }) {
+
+  mapPropsToValues({ firstName, lastName, role, email, password, confirmPassword, tos }) {
     return {
-      name: name || "",
+      firstName: firstName || "",
+      lastName: lastName || "",
+      role: role || "Intern",
       email: email || "",
       password: password || "",
       confirmPassword: confirmPassword || "",
@@ -37,9 +62,14 @@ const FormikLoginForm = withFormik({
   },
 
   validationSchema: Yup.object().shape({
-    name: Yup.string()
+    firstName: Yup.string()
         .min(3, "Name must be 3 characters or longer.")
-        .required("Full name is required."),
+        .required("First name is required."),
+    lastName: Yup.string()
+        .min(3, "Name must be 3 characters or longer.")
+        .required("Last name is required."),
+    role: Yup.string()
+        .required("You must select a role."),
     email: Yup.string()
         .email("Email not valid.")
         .required("Email is required."),
@@ -53,9 +83,25 @@ const FormikLoginForm = withFormik({
         .test('tos', "You must accept Terms of Service to sign up.", value => value === true)
   }),
 
-  handleSubmit(values) {
+  handleSubmit(values, { resetForm, setSubmitting, setStatus, setErrors }) {
     console.log(values);
-    //THIS IS WHERE YOU DO YOUR FORM SUBMISSION CODE... HTTP REQUESTS, ETC.
+    values.email === "waffle@syrup.com"
+    ? setErrors({email: "That email is already taken."})
+
+    : axios
+    .post("https://reqres.in/api/users", values)
+    .then(response => {
+        console.log("Success!", response);
+        let user = response.data;
+        setStatus(user);
+        resetForm();
+        setSubmitting(false);
+        setStatus();
+    })
+    .catch(error => {
+        console.log("Mission failed.", error);
+        setSubmitting(false);
+    });
   }
 })(LoginForm);
 
