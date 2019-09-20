@@ -5,8 +5,8 @@
     background-image: url(../images/bg.jpg);
     background-attachment: fixed;
     background-size: cover;
-    background-repeat: no-repeat;
 }
+
 
 .signUp {
     background-color: white;
@@ -30,6 +30,11 @@ Form {
     padding: 5px;
     margin: 5px;
     border-radius: 10px;
+}
+
+.error {
+    background-color: #aa3e34;
+    color: white;
 }
 
 .name {
