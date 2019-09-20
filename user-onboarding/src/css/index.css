@@ -1,0 +1,64 @@
+* {
+    font-family: Verdana;
+    font-size: 16px;
+    color: Black;
+    background-image: url(../images/bg.jpg);
+    background-attachment: fixed;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.signUp {
+    background-color: white;
+    opacity: 100;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+h2 {
+    font-family: 'Amatic SC', cursive;
+    font-size: 3rem;
+}
+
+Form {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    padding: 50px 100px;
+}
+
+.field {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.tos {
+    padding: 10px 0;
+    font-size: .8rem;
+}
+
+.link {
+    font-size: .8rem;
+    text-decoration: underline;
+    color: green;
+}
+
+button {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.footer {
+    background-color:white;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+}
